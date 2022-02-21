@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 TemmyAppplate</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body ng-controller="postavshik">
+<div>
+
+</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">HOSPITAL</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/hosp/postavki.html">Поставки от поставщиков <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="/hosp/postavshiki.html">Добавить поставку</a>
+
+        </div>
+    </div>
+</nav>
+<div class="container" >
+    <div class="jumbotron">
+        <div class="container" >
+            <h1>Изменение поставщика <span class="badge badge-secondary" >{{films[0].name}}</span></h1>
+            <div class="alert alert-success" role="alert" ng-show="showDone">
+                {{Done}}
+            </div>
+            <div class="alert alert-danger" role="alert" ng-show="showErr">
+                {{err}}
+            </div>
+            <form>
+                <div class="col-12">
+                    <div class="form-group col-md-12">
+                        <label >Название поставщика</label>
+                        <input type="text" class="form-control"  ng-model="films[0].name">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label >Адрес</label>
+                        <input type="text" class="form-control" ng-model="films[0].adress"  >
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label >Телефон</label>
+                        <input type="text" class="form-control" ng-model="films[0].phone"  >
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label >Страна</label>
+                        <input type="text" class="form-control" ng-model="films[0].country"  >
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" ng-click="addPost()">Изменить</button>
+                <button type="button" class="btn btn-danger" ng-click="dellPost(films[0].id)">Удалить</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('postavshik', function($scope,$http) {
+        $scope.showErr = $scope.showDone = false;
+        $scope.err = "";
+        /*$scope. = function (pass,ReplayPass) {
+            if (pass.length >= 1){
+                return true;
+            }
+        }*/
+        $scope.adss = function(){
+            console.log($scope.films);
+        }
+        $scope.getFilm = function(id) {
+            var query = "postavka/postavshiki.php?id=" + id;
+            $http.get(query)
+                .then(
+                    response => {
+                        console.log(response.status);
+                        $scope.films = response.data;
+                        var check = response.data;
+                        //console.log(response.data);
+                        console.log($scope.films);
+                        /*check = check.trim();
+                        if (!check) {
+                            $scope.showErr = true;
+                            $scope.showDone = false;
+                            $scope.film = 0;
+                            $scope.err = "Фильм не найден";
+                        }*/
+
+                    },
+                    error => {
+                        console.log(error);
+                        if (error.status == 400) {
+                            $scope.err = "Не хватает данных"
+                        } else {
+                            $scope.err = "Что-то пошло не так";
+                        }
+                        $scope.showErr = true;
+                        $scope.showDone = false;
+
+                    });
+            //$scope.countries.push({name:'нет'});
+        }
+        $scope.getURL = function (name){
+            if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+                return decodeURIComponent(name[1]);
+        }
+        $scope.DialogDemoCtrl = function ($scope, $dialog){
+            $dialog.dialog({}).open('modalContent.html');
+        }
+        $scope.getCountries = function() {
+            $http.get("countries.php")
+                .then(function (response) {
+                    $scope.countries = response.data;
+                    console.log($scope.countries) ;
+                    $scope.countries.push({name:'нет'});
+                });
+        }
+        $scope.getGenres = function() {
+            $http.get("genres.php")
+                .then(function (response) {
+                    $scope.genres = response.data;
+                    $scope.genres.push({name:'нет'});
+                });
+        }
+        $scope.getGenres();
+        $scope.getCountries();
+
+        $scope.dellPost = function(id){
+            var el = {id:id};
+            $http({
+                method: 'DELETE',
+                url: 'postavka/postavshiki.php',
+                data: JSON.stringify(el),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(
+                response => {
+                    console.log(response.status);
+                    if (response.status == 201) {
+                        $scope.showDone = true;
+                        $scope.Done = "Поставщик удален!"
+                        $scope.showErr = false;
+                    }
+                },
+                error => {
+                    console.log(error);
+                    if (error.status == 400) {
+                        $scope.err = "Не хватает данных"
+                    } else {
+                        $scope.err = "Что-то пошло не так";
+                    }
+                    $scope.showErr = true;
+                    $scope.showDone = false;
+                });
+            //$scope.getFilm();
+        }
+        $scope.addPost = function () {
+            console.log($scope.films);
+            $http({
+                method: 'POST',
+                url: 'postavka/postavshiki.php',
+                data: JSON.stringify($scope.films),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(
+                response => {
+                    console.log(response.status);
+                    if (response.status == 201) {
+                        $scope.Done = "Запись поставщика успешно обновлена!";
+                        $scope.showDone = true;
+                        $scope.showErr = false;
+                    }
+                },
+                error => {
+                    console.log(error);
+                    if (error.status == 400) {
+                        $scope.err = "Не хватает данных"
+                    } else {
+                        $scope.err = "Что-то пошло не так";
+                    }
+                    $scope.showErr = true;
+                    $scope.showDone = false;
+                });
+        }
+        $scope.getFilm($scope.getURL("id"));
+    });
+</script>
+</body>
+</html>
