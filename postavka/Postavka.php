@@ -49,16 +49,7 @@ class Postavka
         return $stmt;
     }
 
-//    function change(){
-//        $sql = "UPDATE поставщик SET `Название`='$this->name',`Адрес`='$this->adress',`Телефон`='$this->phone',
-//`Страна`='$this->country' WHERE 	ID_Поставщика = '$this->id'";
-//        if ($this->conn->query($sql) == TRUE) {
-//            return true;
-//        } else {
-//            echo "Error: " . $sql . "<br>" . $this->conn->error;
-//            return false;
-//        }
-//    }
+
 
     function create(){
         $sql = "INSERT INTO поставка (Дата_поставки, Номер_документа, ID_Поставщика, ID_Состояния)

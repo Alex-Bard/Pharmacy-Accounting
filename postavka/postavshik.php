@@ -31,28 +31,21 @@ class Postavshik
                 ID_Поставщика as id, Название as name, Адрес as adress, Телефон as phone, Страна as country
             FROM поставщик WHERE Название LIKE '%$serch%' ORDER BY Название $sort";
         }
-        // выбираем все записи
 
-
-        // подготовка запроса
         $stmt = $this->conn->prepare($query);
 
-        // выполняем запрос
         $stmt->execute();
 
         return $stmt;
     }
     public function readById($id){
 
-        // выбираем все записи
         $query = "SELECT
                 ID_Поставщика as id, Название as name, Адрес as adress, Телефон as phone, Страна as country
             FROM поставщик WHERE ID_Поставщика = $id";
 
-        // подготовка запроса
         $stmt = $this->conn->prepare($query);
 
-        // выполняем запрос
         $stmt->execute();
 
         return $stmt;

@@ -184,38 +184,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
         http_response_code(400);
     }
 }
-//elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
-//    $data = json_decode(file_get_contents("php://input"));
-//    if (!empty($data->id)) {
-//        $postavshik->id = (int)$data->id;
-//        if ($postavshik->delete()) {
-//            http_response_code(201);
-//        } else {
-//            http_response_code(503);
-//        }
-//    } else {
-//        http_response_code(400);
-//    }
-//}elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
-//    $data = json_decode(file_get_contents("php://input"));
-//    if (!empty($data->name) &&
-//        !empty($data->phone) &&
-//        !empty($data->adress) &&
-//        !empty($data->country)) {
-//
-//        $postavshik->name = $data->name;
-//        $postavshik->phone = $data->phone;
-//        $postavshik->adress = $data->adress;
-//        $postavshik->country = $data->country;
-//
-//        if ($postavshik->create()) {
-//            http_response_code(201);
-//        } else {
-//            http_response_code(503);
-//        }
-//    } else {
-//        http_response_code(400);
-//    }
+
 
 elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
     $data = json_decode(file_get_contents("php://input"));
